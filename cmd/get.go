@@ -25,31 +25,20 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// getCmd represents the get command
 var getCmd = &cobra.Command{
 	Use:   "get",
-	Short: "Extract the given part of <version>, otherwise extract the release.",
+	Short: "Extract the given part of <version>. Part may be release.",
 	Long: `Extract the given part of <version>, where part is one of major, minor, patch, 
-pre, or build.
+pre, build, or release.
 
-The parsed version part or release will be written to stdout.
+The extracted part will be written to stdout.
 If <version> is not a valid semantic version, an error will be written to 
 stderr.`,
 	Example: "get [major|minor|patch|pre|build|release] <version>",
-	Args: cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {},
+	Args:    cobra.NoArgs,
+	Run:     func(cmd *cobra.Command, args []string) {},
 }
 
 func init() {
 	rootCmd.AddCommand(getCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// getCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// getCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

@@ -19,10 +19,22 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package main
+package cmd
 
-import "github.com/nhalase/semver/cmd"
+import (
+	"errors"
+	"fmt"
+	"github.com/blang/semver/v4"
+	"github.com/spf13/cobra"
+)
 
-func main() {
-	cmd.Execute()
+func ValidateGetCmd(_ *cobra.Command, args []string) error {
+	if len(args) < 1 {
+		return errors.New("<version> is a required argument")
+	}
+	_, err := semver.Make(args[0])
+	if err != nil {
+		return fmt.Errorf("%s is not a valid version 2.0.0 semantic version; see semver.org", args[0])
+	}
+	return nil
 }

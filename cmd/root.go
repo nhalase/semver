@@ -33,14 +33,12 @@ import (
 var cfgFile string
 
 var rootCmd = &cobra.Command{
-	Use:   "semvercli",
+	Use:   "semver",
 	Short: "A multi-platform semantic versioning command line tool.",
-	Long: `Semvercli is a CLI tool written in Go that provides semantic versioning
+	Long: `Semver is a CLI tool written in Go that provides semantic versioning
 features such as version parsing, version modification, and version comparison.`,
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -55,7 +53,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.semvercli.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.semver.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -75,9 +73,9 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".semvercli" (without extension).
+		// Search config in home directory with name ".semver" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".semvercli")
+		viper.SetConfigName(".semver")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
