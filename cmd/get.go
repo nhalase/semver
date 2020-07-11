@@ -19,10 +19,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package main
+package cmd
 
-import "github.com/nhalase/semver/cmd"
+import (
+	"github.com/spf13/cobra"
+)
 
-func main() {
-	cmd.Execute()
+var getCmd = &cobra.Command{
+	Use:   "get",
+	Short: "Extract the given part of <version>. Part may be release.",
+	Long: `Extract the given part of <version>, where part is one of major, minor, patch, 
+pre, build, or release.
+
+The extracted part will be written to stdout.
+If <version> is not a valid semantic version, an error will be written to 
+stderr.`,
+	Example: "get [major|minor|patch|pre|build|release] <version>",
+	Args:    cobra.NoArgs,
+	Run:     func(cmd *cobra.Command, args []string) {},
+}
+
+func init() {
+	rootCmd.AddCommand(getCmd)
 }

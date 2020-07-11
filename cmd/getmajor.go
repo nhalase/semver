@@ -19,10 +19,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package main
+package cmd
 
-import "github.com/nhalase/semver/cmd"
+import (
+	"github.com/blang/semver/v4"
+	"github.com/spf13/cobra"
+)
 
-func main() {
-	cmd.Execute()
+var getMajorCmd = &cobra.Command{
+	Use:   "major",
+	Short: "Extract the MAJOR part of <version>.",
+	Long:  "Extract the MAJOR part of <version> where <version> is MAJOR.MINOR.PATCH.",
+	Args:  ValidateGetCmd,
+	Run:   runGetMajorCmd,
+}
+
+func runGetMajorCmd(_ *cobra.Command, args []string) {
+	version, _ := semver.Make(args[0])
+	_, _ = printf("%d", version.Major)
+}
+
+func init() {
+	getCmd.AddCommand(getMajorCmd)
 }

@@ -19,10 +19,38 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package main
+package cmd
 
-import "github.com/nhalase/semver/cmd"
+import (
+	"github.com/blang/semver/v4"
+	"strings"
 
-func main() {
-	cmd.Execute()
+	"github.com/spf13/cobra"
+)
+
+var getBuildCmd = &cobra.Command{
+	Use:   "build",
+	Short: "Extract the build metadata part of <version>.",
+	Long: `Extract the build metadata part of <version>.
+
+Build metadata MAY be denoted by appending a plus sign and a series of dot 
+separated identifiers immediately following the patch or pre-release version. 
+Identifiers MUST comprise only ASCII alphanumerics and hyphens [0-9A-Za-z-]. 
+Identifiers MUST NOT be empty. Build metadata MUST be ignored when 
+determining version precedence. Thus two versions that differ only in the 
+build metadata, have the same precedence. 
+
+Examples: 1.0.0-alpha+001, 1.0.0+20130313144700, 1.0.0-beta+exp.sha.5114f85, 
+1.0.0+21AF26D3—-117B344092BD.`,
+	Args: ValidateGetCmd,
+	Run:  runGetBuildCmd,
+}
+
+func runGetBuildCmd(_ *cobra.Command, args []string) {
+	version, _ := semver.Make(args[0])
+	_, _ = printf("%s", strings.Join(version.Build, "."))
+}
+
+func init() {
+	getCmd.AddCommand(getBuildCmd)
 }

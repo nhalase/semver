@@ -19,10 +19,34 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package main
+package cmd
 
-import "github.com/nhalase/semver/cmd"
+import (
+	"github.com/spf13/cobra"
+	"testing"
+)
 
-func main() {
-	cmd.Execute()
+func TestValidateGetCmd(t *testing.T) {
+	type args struct {
+		in0  *cobra.Command
+		args []string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"arguments are required", args{}, true},
+		{"1.2.3 passes validation", args{args: []string{"1.2.3"}}, false},
+		{"1.2 passes validation", args{args: []string{"1.2"}}, true},
+		{"1.2.3--SNAPSHOT.ABN passes validation", args{args: []string{"1.2.3--SNAPSHOT.ABN"}}, false},
+		{"1.2.3--SNAPSHOT.ABC+abc.123.-z1z passes validation", args{args: []string{"1.2.3--SNAPSHOT.ABC+abc.123.-z1z"}}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := ValidateGetCmd(tt.args.in0, tt.args.args); (err != nil) != tt.wantErr {
+				t.Errorf("ValidateGetCmd() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
 }
